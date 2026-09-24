@@ -1,103 +1,36 @@
-# فرنو الکترونیک — مینی‌اپ تلگرام
+# FarnoSelf F Coin — connected Mini App
 
-## ساختار پوشه‌ها
+This version connects the F Coin Mini App to the existing FarnoSelf Python/Flask bot.
 
-```
-farno-miniapp/
-├── index.html
-├── css/
-│   └── style.css
-├── js/
-│   ├── data.js
-│   └── app.js
-├── images/
-│   └── circuits/
-│       ├── cheshmak555.jpg
-│       ├── felasher555.jpg
-│       ├── felasher547.jpg
-│       ├── cheshmak2q.jpg
-│       ├── dozdgirleyzeri.jpg
-│       └── hoshdardahandeatash.jpg
-└── README.md
-```
+## Architecture
+- Telegram Mini App frontend can be hosted on GitHub Pages.
+- Existing bot remains the source of truth for the real Bot Coin wallet (`coin_wallets`).
+- F Coin has its own server-side wallet (`fcoin_wallets`).
+- Conversion is atomic: **1,000 F Coin = 1 Bot Coin**.
+- Telegram `initData` is verified server-side with the bot token.
+- Tap, daily bonus and conversion are server-authoritative.
 
-## عکس‌های مدار (حتماً با همین اسم‌ها آپلود کن)
+## API
+- `GET /api/fcoin/me`
+- `POST /api/fcoin/tap`
+- `POST /api/fcoin/daily`
+- `POST /api/fcoin/convert`
 
-این فایل‌ها رو از سرور PythonAnywhere بردار و داخل پوشه `images/circuits/` بذار:
+The frontend sends `Telegram.WebApp.initData` in `X-Telegram-Init-Data`.
 
-| اسم فایل در گیت‌هاب              | توضیح                          |
-|----------------------------------|--------------------------------|
-| `cheshmak555.jpg`                | چشمک‌زن با آیسی ۵۵۵           |
-| `felasher555.jpg`                | فلاشر با آیسی ۵۵۵             |
-| `felasher547.jpg`                | فلاشر با BC547                |
-| `cheshmak2q.jpg`                 | چشمک‌زن با دو ترانزیستور      |
-| `dozdgirleyzeri.jpg`             | دزدگیر لیزری                  |
-| `hoshdardahandeatash.jpg`        | هشداردهنده آتش                |
+## Deploy frontend to GitHub Pages
+1. Upload the contents of this folder to a GitHub repository.
+2. Enable GitHub Pages for the repository.
+3. Set `API` in `app.js` to the public URL of the Flask backend.
+4. Set `FCOIN_WEBAPP_URL` in the backend environment to the GitHub Pages URL.
 
-## مراحل راه‌اندازی (کاملاً رایگان با گیت‌هاب)
+## Backend deployment
+1. Replace the bot file with the patched `botself_v4_updated-1.py`.
+2. Set `BOT_TOKEN`, `WEBHOOK_HOST`, and `FCOIN_WEBAPP_URL` as environment variables.
+3. Keep the existing `selfbot.db` beside the Python app so the existing wallets remain intact.
+4. Visit `/set_webhook` once after deployment.
 
-### ۱. ساخت ریپازیتوری
-1. برو https://github.com/new
-2. اسم بذار مثلاً `farno-miniapp`
-3. Public انتخاب کن
-4. Create repository
+## Important security action
+The uploaded source contained a live Telegram bot token. It is intentionally not included in the patched source. **Rotate/revoke that token in BotFather before deploying this version**, then set the new token as `BOT_TOKEN` in the server environment.
 
-### ۲. آپلود فایل‌ها
-- همه فایل‌های بالا رو آپلود کن (می‌تونی از GitHub Desktop یا مستقیم Drag & Drop استفاده کنی)
-- عکس‌های مدار رو هم حتماً داخل `images/circuits/` بذار
-
-### ۳. فعال کردن GitHub Pages
-1. برو به Settings ریپازیتوری
-2. از منوی سمت چپ Pages رو بزن
-3. Source رو روی `Deploy from a branch` بذار
-4. Branch رو `main` و پوشه `/ (root)` انتخاب کن
-5. Save کن
-6. چند دقیقه صبر کن تا آدرس آماده بشه:
-   `https://YOUR_USERNAME.github.io/farno-miniapp/`
-
-### ۴. اتصال به ربات (BotFather)
-1. برو پیش @BotFather
-2. `/mybots` → رباتت رو انتخاب کن
-3. **Bot Settings** → **Menu Button** → **Configure menu button**
-4. آدرس مینی‌اپ رو بفرست (همون آدرس GitHub Pages)
-5. متن دکمه رو مثلاً بذار: `⚡ منوی اصلی`
-
-یا از طریق **Configure Mini App** هم می‌تونی ست کنی.
-
-### ۵. (اختیاری ولی پیشنهادی) دریافت سفارش مستقیم در ربات
-
-برای اینکه سفارش‌ها مستقیم به ربات برسه، این کد رو به فایل رباتت اضافه کن:
-
-```python
-@bot.message_handler(content_types=['web_app_data'])
-def handle_webapp_data(message):
-    try:
-        import json
-        data = json.loads(message.web_app_data.data)
-        if data.get("type") == "order":
-            text = f"📦 سفارش جدید از مینی‌اپ\n\n"
-            text += f"👤 نام: {data.get('name')}\n"
-            text += f"📱 شماره: {data.get('phone')}\n"
-            if data.get('note'):
-                text += f"📝 توضیحات: {data.get('note')}\n"
-            text += "\n━━━━━━━━━━━━\n"
-            for i, item in enumerate(data.get('items', []), 1):
-                text += f"\n{i}. {item.get('product')}\n"
-                text += f"   مقدار: {item.get('value')}\n"
-                text += f"   تعداد: {item.get('count')}\n"
-
-            bot.send_message(ADMIN, text)
-            bot.send_message(ADMIN2, text)
-            bot.send_message(message.chat.id, "✅ سفارشت ثبت شد و به پشتیبانی ارسال گردید.")
-    except Exception as e:
-        print("web_app_data error:", e)
-```
-
-اگر این هندلر رو نذاری، مینی‌اپ سفارش رو به صورت پیام آماده به پشتیبانی (@nvdrl) باز می‌کنه.
-
-## نکات مهم
-
-- مینی‌اپ کاملاً استاتیکه و روی گیت‌هاب رایگان کار می‌کنه
-- سبد خرید با localStorage ذخیره می‌شه
-- بعداً می‌تونی جلوی هر قطعه قیمت اضافه کنی (تو فایل `js/data.js` و `js/app.js`)
-- اگر عکس‌ها لود نشدن، اسم فایل‌ها رو دقیق چک کن (حساس به حروف بزرگ/کوچک)
+Do not put the bot token in GitHub Pages, JavaScript, HTML, or CSS.

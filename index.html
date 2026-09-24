@@ -1,256 +1,62 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>فرنو الکترونیک</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <link rel="stylesheet" href="css/style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#050914"><title>FarnoSelf • F Coin</title>
+<script src="https://telegram.org/js/telegram-web-app.js?63"></script>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="app">
-    <!-- Header -->
-    <header class="header">
-      <div class="header-content">
-        <div class="logo">
-          <span class="logo-icon">⚡</span>
-          <span class="logo-text">فرنو الکترونیک</span>
-        </div>
-        <button class="cart-btn" onclick="showPage('cart')" id="cartBtn">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M9 22C9.55228 22 10 21.5523 10 21C10 20.4477 9.55228 20 9 20C8.44772 20 8 20.4477 8 21C8 21.5523 8.44772 22 9 22Z"/>
-            <path d="M20 22C20.5523 22 21 21.5523 21 21C21 20.4477 20.5523 20 20 20C19.4477 20 19 20.4477 19 21C19 21.5523 19.4477 22 20 22Z"/>
-            <path d="M1 1H5L7.68 14.39C7.77144 14.8504 8.02191 15.264 8.38755 15.5583C8.75318 15.8526 9.2107 16.009 9.68 16H19.4C19.8693 16.009 20.3268 15.8526 20.6925 15.5583C21.0581 15.264 21.3086 14.8504 21.4 14.39L23 6H6"/>
-          </svg>
-          <span class="cart-badge" id="cartBadge">0</span>
-        </button>
-      </div>
-    </header>
+<div class="app">
+<header class="topbar">
+  <div class="brand"><span class="brand-dot"></span> FARNO<span>SELF</span></div>
+  <div class="level-pill">LVL <b id="level">1</b></div>
+</header>
 
-    <!-- Main Content -->
-    <main class="main" id="mainContent">
-      <!-- Home Page -->
-      <section id="page-home" class="page active">
-        <div class="hero">
-          <h1>به فرنو الکترونیک خوش اومدی 👋</h1>
-          <p>قطعات الکترونیکی + ابزارهای تخصصی</p>
-        </div>
+<main>
+<section class="hero">
+  <div class="eyebrow">F COIN BALANCE</div>
+  <div class="balance" id="balance">0</div>
+  <div class="rank" id="rank">STARTER</div>
+</section>
 
-        <div class="quick-actions">
-          <button class="action-card primary" onclick="showPage('shop')">
-            <div class="action-icon">🛒</div>
-            <div class="action-text">
-              <strong>ثبت سفارش</strong>
-              <span>قطعات الکترونیکی</span>
-            </div>
-          </button>
-          <button class="action-card" onclick="showPage('tools')">
-            <div class="action-icon">🛠️</div>
-            <div class="action-text">
-              <strong>ابزارها</strong>
-              <span>محاسبات و مدارها</span>
-            </div>
-          </button>
-          <button class="action-card" onclick="showPage('circuits')">
-            <div class="action-icon">📡</div>
-            <div class="action-text">
-              <strong>مدارها</strong>
-              <span>نمونه مدارهای آماده</span>
-            </div>
-          </button>
-          <button class="action-card" onclick="showPage('support')">
-            <div class="action-icon">💬</div>
-            <div class="action-text">
-              <strong>پشتیبانی</strong>
-              <span>ارتباط با ما</span>
-            </div>
-          </button>
-        </div>
+<section class="coin-stage">
+  <div class="orbit orbit1"></div><div class="orbit orbit2"></div><div class="orbit orbit3"></div>
+  <div class="spark s1"></div><div class="spark s2"></div><div class="spark s3"></div>
+  <button class="coin" id="coin" aria-label="Tap F Coin">
+    <div class="coin-inner">
+      <div class="f-symbol"><span>F</span></div>
+      <div class="coin-label">F COIN</div>
+    </div>
+  </button>
+  <div id="popups"></div>
+</section>
 
-        <div class="section-title">دسترسی سریع</div>
-        <div class="mini-grid">
-          <button class="mini-btn" onclick="openChannel()">📢 کانال ما</button>
-          <button class="mini-btn" onclick="showPage('cart')">🛍 سبد خرید</button>
-        </div>
-      </section>
+<section class="stats">
+  <div class="stat"><span>⚡ ENERGY</span><b><i id="energy">100</i>/100</b></div>
+  <div class="stat"><span>🔥 TAP POWER</span><b>+<i id="tapPower">1</i></b></div>
+</section>
+<div class="progress"><div id="energyBar"></div></div>
 
-      <!-- Shop Page -->
-      <section id="page-shop" class="page">
-        <div class="page-header">
-          <button class="back-btn" onclick="showPage('home')">←</button>
-          <h2>ثبت سفارش</h2>
-        </div>
+<section class="level-card">
+  <div class="level-top"><div><small>F COIN LEVEL</small><strong id="levelName">STARTER</strong></div><b><span id="xp">0</span> / <span id="xpNext">1,000</span> XP</b></div>
+  <div class="xpbar"><div id="xpBar"></div></div>
+  <div class="level-foot"><span>Next: <b id="nextName">RISING</b></span><span>+1 tap power</span></div>
+</section>
 
-        <div class="shop-tabs">
-          <button class="shop-tab active" data-tab="parts" onclick="switchShopTab('parts')">🔌 قطعات</button>
-          <button class="shop-tab" data-tab="custom" onclick="switchShopTab('custom')">✨ سفارش خاص</button>
-          <button class="shop-tab" data-tab="pcb" onclick="switchShopTab('pcb')">🖨️ PCB</button>
-        </div>
+<section class="actions">
+  <button class="action" id="convert"><span>⇄</span><b>Convert</b><small>1,000 F → 1 Bot Coin</small></button>
+  <button class="action" id="bonus"><span>🎁</span><b>Daily Bonus</b><small>Claim once per day</small></button>
+</section>
+</main>
 
-        <!-- Parts Categories -->
-        <div id="shop-parts" class="shop-content active">
-          <div class="search-box">
-            <input type="text" id="partSearch" placeholder="جستجوی قطعه..." oninput="filterParts()" />
-          </div>
-          <div class="categories-grid" id="categoriesGrid"></div>
-        </div>
-
-        <!-- Custom Order -->
-        <div id="shop-custom" class="shop-content">
-          <div class="form-card">
-            <h3>سفارش قطعه / ماژول خاص</h3>
-            <p class="form-desc">اسم، مدل و توضیحات قطعه مورد نظرت رو بنویس</p>
-            <textarea id="customDesc" rows="4" placeholder="مثال: ماژول شارژ TP4056 با حفاظت"></textarea>
-            <input type="text" id="customCount" placeholder="تعداد (مثال: ۱۰ عدد)" />
-            <button class="btn-primary" onclick="addCustomToCart()">افزودن به سبد</button>
-          </div>
-        </div>
-
-        <!-- PCB -->
-        <div id="shop-pcb" class="shop-content">
-          <div class="form-card">
-            <h3>طراحی و ساخت PCB</h3>
-            <p class="form-desc">اطلاعات پروژه رو وارد کن</p>
-            <input type="text" id="pcbTitle" placeholder="عنوان پروژه" />
-            <input type="text" id="pcbSize" placeholder="ابعاد (مثال: ۵۰×۳۰ میلی‌متر)" />
-            <select id="pcbLayers">
-              <option value="">تعداد لایه</option>
-              <option value="یک‌رو">یک‌رو (1 Layer)</option>
-              <option value="دورو">دورو (2 Layer)</option>
-              <option value="۴ لایه">۴ لایه</option>
-              <option value="بیش از ۴ لایه">بیش از ۴ لایه</option>
-            </select>
-            <input type="text" id="pcbQty" placeholder="تیراژ (تعداد)" />
-            <textarea id="pcbNotes" rows="3" placeholder="توضیحات تکمیلی (اختیاری)"></textarea>
-            <button class="btn-primary" onclick="addPcbToCart()">افزودن به سبد</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- Category Products -->
-      <section id="page-products" class="page">
-        <div class="page-header">
-          <button class="back-btn" onclick="showPage('shop')">←</button>
-          <h2 id="productsTitle">محصولات</h2>
-        </div>
-        <div class="products-list" id="productsList"></div>
-      </section>
-
-      <!-- Cart Page -->
-      <section id="page-cart" class="page">
-        <div class="page-header">
-          <button class="back-btn" onclick="showPage('home')">←</button>
-          <h2>سبد خرید</h2>
-        </div>
-        <div id="cartItems" class="cart-items"></div>
-        <div id="cartEmpty" class="empty-state" style="display:none;">
-          <div class="empty-icon">🛒</div>
-          <p>سبد خریدت خالیه</p>
-          <button class="btn-primary" onclick="showPage('shop')">شروع خرید</button>
-        </div>
-        <div id="cartFooter" class="cart-footer" style="display:none;">
-          <button class="btn-primary btn-block" onclick="showPage('checkout')">ادامه و ثبت سفارش</button>
-        </div>
-      </section>
-
-      <!-- Checkout -->
-      <section id="page-checkout" class="page">
-        <div class="page-header">
-          <button class="back-btn" onclick="showPage('cart')">←</button>
-          <h2>ثبت نهایی سفارش</h2>
-        </div>
-        <div class="form-card">
-          <input type="text" id="orderName" placeholder="نام و نام‌خانوادگی" />
-          <input type="tel" id="orderPhone" placeholder="شماره تماس" />
-          <textarea id="orderNote" rows="2" placeholder="توضیحات اضافه (اختیاری)"></textarea>
-          <button class="btn-primary btn-block" onclick="submitOrder()">✅ ثبت و ارسال سفارش</button>
-        </div>
-      </section>
-
-      <!-- Tools Page -->
-      <section id="page-tools" class="page">
-        <div class="page-header">
-          <button class="back-btn" onclick="showPage('home')">←</button>
-          <h2>ابزارهای کاربردی</h2>
-        </div>
-        <div class="tools-grid" id="toolsGrid"></div>
-      </section>
-
-      <!-- Tool Detail (Calculator) -->
-      <section id="page-tool" class="page">
-        <div class="page-header">
-          <button class="back-btn" onclick="showPage('tools')">←</button>
-          <h2 id="toolTitle">ابزار</h2>
-        </div>
-        <div id="toolContent" class="tool-content"></div>
-      </section>
-
-      <!-- Circuits Page -->
-      <section id="page-circuits" class="page">
-        <div class="page-header">
-          <button class="back-btn" onclick="showPage('home')">←</button>
-          <h2>مدارهای الکترونیکی</h2>
-        </div>
-        <div class="circuits-list" id="circuitsList"></div>
-      </section>
-
-      <!-- Circuit Detail -->
-      <section id="page-circuit" class="page">
-        <div class="page-header">
-          <button class="back-btn" onclick="showPage('circuits')">←</button>
-          <h2 id="circuitTitle">مدار</h2>
-        </div>
-        <div id="circuitContent" class="circuit-content"></div>
-      </section>
-
-      <!-- Support -->
-      <section id="page-support" class="page">
-        <div class="page-header">
-          <button class="back-btn" onclick="showPage('home')">←</button>
-          <h2>پشتیبانی</h2>
-        </div>
-        <div class="support-cards">
-          <a class="support-card" href="https://t.me/nvdrl" target="_blank">
-            <div class="support-icon">👨‍💻</div>
-            <div>
-              <strong>پشتیبانی مستقیم</strong>
-              <span>@nvdrl</span>
-            </div>
-          </a>
-          <a class="support-card" href="https://t.me/FarnoElectronic" target="_blank">
-            <div class="support-icon">📢</div>
-            <div>
-              <strong>کانال رسمی</strong>
-              <span>@FarnoElectronic</span>
-            </div>
-          </a>
-        </div>
-      </section>
-    </main>
-
-    <!-- Bottom Navigation -->
-    <nav class="bottom-nav">
-      <button class="nav-item active" data-page="home" onclick="showPage('home')">
-        <span class="nav-icon">🏠</span>
-        <span>خانه</span>
-      </button>
-      <button class="nav-item" data-page="shop" onclick="showPage('shop')">
-        <span class="nav-icon">🛒</span>
-        <span>سفارش</span>
-      </button>
-      <button class="nav-item" data-page="tools" onclick="showPage('tools')">
-        <span class="nav-icon">🛠️</span>
-        <span>ابزارها</span>
-      </button>
-      <button class="nav-item" data-page="circuits" onclick="showPage('circuits')">
-        <span class="nav-icon">📡</span>
-        <span>مدارها</span>
-      </button>
-    </nav>
-  </div>
-
-  <script src="js/data.js"></script>
-  <script src="js/app.js"></script>
-</body>
-</html>
+<nav class="nav">
+<button class="nav-item active">◉<small>Earn</small></button>
+<button class="nav-item">🎯<small>Tasks</small></button>
+<button class="nav-item">👥<small>Friends</small></button>
+<button class="nav-item">🏆<small>Ranks</small></button>
+</nav>
+<div id="toast" class="toast"></div>
+</div>
+<script src="app.js"></script>
+</body></html>
